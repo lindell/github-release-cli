@@ -1,0 +1,17 @@
+language: go
+script:
+- make test
+- make build-all
+before_deploy:
+- curl https://github.com/lindell/travis-golang-release-boilerplate/releases/download/0.4.0/github-release -L --output github-releaser && chmod +x github-releaser
+- export BODY=$(cat ./CHANGELOG.md)
+- export FILES=bin/*
+deploy:
+  provider: script
+  script: "./github-releaser"
+  skip_cleanup: true
+  on:
+    tags: true
+env:
+  global:
+    secure: RLYDztXA+ZSm16AoyLf7a/iOvs6kdWYO75gLkslzDzCcw+F52KrBcc+cOzoBaUjjCLuc1shAwsqx2sry4v7KWYyMKraLBhXX3DbuPwqRu3QAu3TQK1OlMgom509MPHWQ4QjhWnngrfEiXAslOav0r2r1Uxyq92fgCm/ZkCYAvE/110ehlv9LJgxd3+uB1sVgbwbfit80dDPBu+DRwVnKVxv3W/YLJ/g9vXoaQTbkykZrNU14yWz1wSNa1K6vqqHimbA1ja9REjuNMVl7RYyn9AvIadFqnebr1u6y0gMPQ85vRZ1uutReiSwDXBxICPl+0jXd9SThS/Q27MP0b70F5zIgLniHK607oTQNp6xjPhtAG6yrLW+iPuXWA2ikW5jWRKev1RsY1ScUwZxk5vit7d7IRzDBkeehxRQYhv93hbRiWrQrFSP6XDgF4Cq7J4iUxhJXB3RXLBEkW/ia9zHP9zXX7iEFYxFltyxSB/1nqH9R294NvYm9bfpYAdqsKvKF+WZDwxI/JkKD852DbpVpqhnVWQJGKaJPZiRX+JHNdnOZBTJhcSVJl0Q2UUKcdeciDPzgkl2DN85g3pq6+k/SdtzWmkC1MABa0EB2buEnO2lAHQAR0QjCxs6c8eKcaZAUAeJ6oeBi0I+6C9bEyqBWfUsHYRDdy7QRA6JuOyL3MPY=
