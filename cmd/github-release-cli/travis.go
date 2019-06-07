@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -12,7 +13,14 @@ import (
 	"golang.org/x/oauth2"
 )
 
+var (
+	draft = false
+)
+
 func main() {
+	flag.BoolVar(&draft, "draft", false, "set if the the release should be added as a draft")
+	flag.Parse()
+
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_OAUTH_TOKEN")},
@@ -41,6 +49,7 @@ func main() {
 		Repo:     repoSlug.Repo,
 		TagName:  name,
 		Body:     os.Getenv("BODY"),
+		Draft:    draft,
 	}
 
 	fmt.Println(config.String())

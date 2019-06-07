@@ -16,6 +16,7 @@ type ReleaseConfig struct {
 	TagName  string
 	Name     *string
 	Body     string
+	Draft    bool
 }
 
 func (c *ReleaseConfig) String() string {
@@ -24,7 +25,8 @@ Owner: %s
 Repo: %s
 TagName: %s
 Name: %v
-Body: %s`,
+Body: %s
+Draft: %v`,
 		c.FileGlob,
 		c.Owner,
 		c.Repo,
@@ -60,6 +62,7 @@ func Release(
 	release, _, err := client.Repositories.CreateRelease(ctx, config.Owner, config.Repo, &github.RepositoryRelease{
 		TagName: &config.TagName,
 		Name:    config.Name,
+		Draft:   &config.Draft,
 		Body:    &config.Body,
 	})
 	if err != nil {
