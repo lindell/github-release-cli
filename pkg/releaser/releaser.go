@@ -33,6 +33,7 @@ Draft: %v`,
 		c.TagName,
 		c.Name,
 		c.Body,
+		c.Draft,
 	)
 }
 
