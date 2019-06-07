@@ -3,7 +3,7 @@ script:
 - make test
 - make build-all
 before_deploy:
-- curl https://github.com/lindell/travis-golang-release-boilerplate/releases/download/0.5.0/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
+- curl https://github.com/lindell/github-release-cli/releases/download/0.2.2/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
 - export BODY=$(envsubst < ./assets/CHANGELOG.md)
 - export FILES=bin/*
 deploy:
