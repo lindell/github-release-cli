@@ -13,15 +13,19 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var (
-	draft   = false
-	verbose = false
-)
+var buildTag = ""
 
 func main() {
-	flag.BoolVar(&draft, "draft", false, "set if the the release should be added as a draft")
-	flag.BoolVar(&verbose, "verbose", false, "print logging statements")
+
+	draft := flag.Bool("draft", false, "set if the the release should be added as a draft")
+	verbose := flag.Bool("verbose", false, "print logging statements")
+	version := flag.Bool("version", false, "print the current version of the releaser")
 	flag.Parse()
+
+	if *version {
+		fmt.Printf("travis releaser version: %s\n", buildTag)
+		return
+	}
 
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
@@ -55,7 +59,7 @@ func main() {
 	}
 
 	var logger releaser.Logger
-	if verbose {
+	if *verbose {
 		logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	}
 
@@ -66,7 +70,7 @@ func main() {
 		TagName:  tag,
 		Name:     name,
 		Body:     os.Getenv("BODY"),
-		Draft:    draft,
+		Draft:    *draft,
 		Logger:   logger,
 	}
 
