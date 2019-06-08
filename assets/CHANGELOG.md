@@ -9,6 +9,7 @@ The only variables you need to take into concideration are:
 | BODY | `false` | The body of the release, can be markdown. It's recomended to use `$(envsubst < ./CHANGELOG.md)` or `$(cat ./CHANGELOG.md)` for longer bodys |
 | FILES | `false` | The path to the file(s) that should be uploaded. Wildcards can be used (e.g. `release-files/*`) |
 
+### Example `.travis.yml`
 ```yaml
 before_deploy:
 - curl https://github.com/lindell/github-release-cli/releases/download/$TRAVIS_TAG/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
