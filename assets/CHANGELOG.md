@@ -6,8 +6,9 @@ The only variables you need to take into concideration are:
 | Name | Optional | Description |
 |------|----------|-------------|
 | GITHUB_OATH_TOKEN | `true` | The oath token from github, needed to get the access to create the release |
-| BODY | `false` | The body of the release, can be markdown. It's recomended to use `$(envsubst < ./CHANGELOG.md)` or `$(cat ./CHANGELOG.md)` for longer bodys |
+| BODY | `false` | The body of the release, can be markdown. It's recomended to use `$(envsubst < ./CHANGELOG.md)` or `$(cat ./CHANGELOG.md)` for longer bodies |
 | FILES | `false` | The path to the file(s) that should be uploaded. Wildcards can be used (e.g. `release-files/*`) |
+| RELEASE_NAME | `false` | The name (title) of the release. If nothing is set, it will be the same as the tag name |
 
 ### Example `.travis.yml`
 ```yaml

@@ -34,20 +34,30 @@ func main() {
 		log.Fatal(err)
 	}
 
-	tag := os.Getenv("TRAVIS_TAG")
+	tagEnv := os.Getenv("TRAVIS_TAG")
+	nameEnv := os.Getenv("RELEASE_NAME")
 
+	var tag string
 	var name string
-	if tag != "" {
-		name = tag
+
+	if tagEnv != "" {
+		tag = tagEnv
 	} else {
-		name = fmt.Sprintf("%s-%s", os.Getenv("TRAVIS_BRANCH"), os.Getenv("TRAVIS_COMMIT"))
+		tag = fmt.Sprintf("%s-%s", os.Getenv("TRAVIS_BRANCH"), os.Getenv("TRAVIS_COMMIT"))
+	}
+
+	if nameEnv != "" {
+		name = nameEnv
+	} else {
+		name = tag
 	}
 
 	config := releaser.ReleaseConfig{
 		FileGlob: os.Getenv("FILES"),
 		Owner:    repoSlug.Owner,
 		Repo:     repoSlug.Repo,
-		TagName:  name,
+		TagName:  tag,
+		Name:     &name,
 		Body:     os.Getenv("BODY"),
 		Draft:    draft,
 	}
