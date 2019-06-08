@@ -24,7 +24,7 @@ before_deploy:
 - export FILES=release-files/*
 deploy:
   provider: script
-  script: ./github-releaser
+  script: ./github-releaser -draft -verbose
   skip_cleanup: true
   on:
     tags: true
