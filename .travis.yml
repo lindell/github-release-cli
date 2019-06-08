@@ -6,6 +6,7 @@ before_deploy:
 - curl https://github.com/lindell/github-release-cli/releases/download/0.3.1/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
 - export BODY=$(envsubst < ./assets/CHANGELOG.md)
 - export FILES=bin/*
+- export RELEASE_NAME=$(echo "Github Releaser v$TRAVIS_TAG" | envsubst)
 deploy:
   provider: script
   script: ./github-releaser --draft
