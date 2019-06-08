@@ -9,6 +9,7 @@ import (
 	"github.com/google/go-github/github"
 )
 
+// The ReleaseConfig is the configuration of a release and its uploads
 type ReleaseConfig struct {
 	FileGlob string
 	Owner    string
@@ -37,6 +38,7 @@ Draft: %v`,
 	)
 }
 
+// Release creates a github release
 func Release(
 	ctx context.Context,
 	client *github.Client,
