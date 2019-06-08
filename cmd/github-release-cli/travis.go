@@ -14,11 +14,13 @@ import (
 )
 
 var (
-	draft = false
+	draft   = false
+	verbose = false
 )
 
 func main() {
 	flag.BoolVar(&draft, "draft", false, "set if the the release should be added as a draft")
+	flag.BoolVar(&verbose, "verbose", false, "print logging statements")
 	flag.Parse()
 
 	ctx := context.Background()
@@ -52,17 +54,21 @@ func main() {
 		name = tag
 	}
 
+	var logger releaser.Logger
+	if verbose {
+		logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	}
+
 	config := releaser.ReleaseConfig{
 		FileGlob: os.Getenv("FILES"),
 		Owner:    repoSlug.Owner,
 		Repo:     repoSlug.Repo,
 		TagName:  tag,
-		Name:     &name,
+		Name:     name,
 		Body:     os.Getenv("BODY"),
 		Draft:    draft,
+		Logger:   logger,
 	}
-
-	fmt.Println(config.String())
 
 	err = releaser.Release(
 		ctx,

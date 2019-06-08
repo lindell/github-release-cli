@@ -15,9 +15,11 @@ type ReleaseConfig struct {
 	Owner    string
 	Repo     string
 	TagName  string
-	Name     *string
+	Name     string
 	Body     string
 	Draft    bool
+
+	Logger Logger
 }
 
 func (c *ReleaseConfig) String() string {
@@ -38,15 +40,37 @@ Draft: %v`,
 	)
 }
 
+// Logger contains functions needed for logging
+type Logger interface {
+	Println(...interface{})
+}
+
+func (c *ReleaseConfig) printf(str string, args ...interface{}) {
+	if c.Logger == nil {
+		return
+	}
+	c.Logger.Println(fmt.Sprintf(str, args...))
+}
+
 // Release creates a github release
 func Release(
 	ctx context.Context,
 	client *github.Client,
 	config ReleaseConfig,
 ) error {
+	config.printf("using config:\n%s", config.String())
+
 	fileNames, err := filepath.Glob(config.FileGlob)
 	if err != nil {
 		return err
+	}
+
+	if len(fileNames) == 0 {
+		config.printf(`no files found with "%s"`, config.FileGlob)
+	} else {
+		for _, n := range fileNames {
+			config.printf(`found file to upload %s`, n)
+		}
 	}
 
 	files := make([]*os.File, len(fileNames))
@@ -58,13 +82,10 @@ func Release(
 		files[i] = file
 	}
 
-	if config.Name == nil {
-		config.Name = &config.TagName
-	}
-
+	config.printf("creating a release")
 	release, _, err := client.Repositories.CreateRelease(ctx, config.Owner, config.Repo, &github.RepositoryRelease{
 		TagName: &config.TagName,
-		Name:    config.Name,
+		Name:    &config.Name,
 		Draft:   &config.Draft,
 		Body:    &config.Body,
 	})
@@ -73,6 +94,7 @@ func Release(
 	}
 
 	for _, f := range files {
+		config.printf("uploading file %s", f.Name())
 		_, _, err := client.Repositories.UploadReleaseAsset(ctx, config.Owner, config.Repo, *release.ID, &github.UploadOptions{
 			Name:  filepath.Base(f.Name()),
 			Label: filepath.Base(f.Name()),
