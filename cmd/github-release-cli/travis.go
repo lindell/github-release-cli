@@ -23,13 +23,17 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Printf("travis releaser version: %s\n", buildTag)
-		return
+		log.Fatalf("travis releaser version: %s\n", buildTag)
+	}
+
+	oathToken := os.Getenv("GITHUB_OAUTH_TOKEN")
+	if oathToken == "" {
+		log.Fatal("no github token provided")
 	}
 
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_OAUTH_TOKEN")},
+		&oauth2.Token{AccessToken: oathToken},
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
