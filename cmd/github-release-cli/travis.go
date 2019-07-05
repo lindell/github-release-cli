@@ -18,6 +18,7 @@ var buildTag = ""
 func main() {
 
 	draft := flag.Bool("draft", false, "set if the the release should be added as a draft")
+	prerelease := flag.Bool("prerelease", false, "set if the the release is identified as non-production ready")
 	verbose := flag.Bool("verbose", false, "print logging statements")
 	version := flag.Bool("version", false, "print the current version of the releaser")
 	flag.Parse()
@@ -68,14 +69,15 @@ func main() {
 	}
 
 	config := releaser.ReleaseConfig{
-		FileGlob: os.Getenv("FILES"),
-		Owner:    repoSlug.Owner,
-		Repo:     repoSlug.Repo,
-		TagName:  tag,
-		Name:     name,
-		Body:     os.Getenv("BODY"),
-		Draft:    *draft,
-		Logger:   logger,
+		FileGlob:   os.Getenv("FILES"),
+		Owner:      repoSlug.Owner,
+		Repo:       repoSlug.Repo,
+		TagName:    tag,
+		Name:       name,
+		Body:       os.Getenv("BODY"),
+		Draft:      *draft,
+		Prerelease: *prerelease,
+		Logger:     logger,
 	}
 
 	err = releaser.Release(

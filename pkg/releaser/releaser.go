@@ -11,13 +11,14 @@ import (
 
 // The ReleaseConfig is the configuration of a release and its uploads
 type ReleaseConfig struct {
-	FileGlob string
-	Owner    string
-	Repo     string
-	TagName  string
-	Name     string
-	Body     string
-	Draft    bool
+	FileGlob   string
+	Owner      string
+	Repo       string
+	TagName    string
+	Name       string
+	Body       string
+	Draft      bool
+	Prerelease bool
 
 	Logger Logger
 }
@@ -29,7 +30,8 @@ Repo: %s
 TagName: %s
 Name: %v
 Body: %s
-Draft: %v`,
+Draft: %v
+Prerelease: %v`,
 		c.FileGlob,
 		c.Owner,
 		c.Repo,
@@ -37,6 +39,7 @@ Draft: %v`,
 		c.Name,
 		c.Body,
 		c.Draft,
+		c.Prerelease,
 	)
 }
 
@@ -84,10 +87,11 @@ func Release(
 
 	config.printf("creating a release")
 	release, _, err := client.Repositories.CreateRelease(ctx, config.Owner, config.Repo, &github.RepositoryRelease{
-		TagName: &config.TagName,
-		Name:    &config.Name,
-		Draft:   &config.Draft,
-		Body:    &config.Body,
+		TagName:    &config.TagName,
+		Name:       &config.Name,
+		Draft:      &config.Draft,
+		Body:       &config.Body,
+		Prerelease: &config.Prerelease,
 	})
 	if err != nil {
 		return err
