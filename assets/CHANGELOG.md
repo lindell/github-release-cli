@@ -14,6 +14,7 @@ The github-travis-releaser takes enviroment variables from travis and parses the
 | Name | Description |
 |------|-------------|
 | -draft | Set the release as a draft |
+| -prerelease | Set if the the release is identified as non-production ready |
 | -verbose | Print logging statements |
 
 ### Example `.travis.yml`
