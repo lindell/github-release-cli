@@ -1,3 +1,5 @@
+# [THIS PROJECT IS NO LONGER MAINTAINED SINCE THE ORIGINAL PROBLEM IS NOW FIXED](https://github.com/travis-ci/dpl/pull/1069)
+
 # 🚢 github-release-cli
 
 Github release CLI is a tool primarily created to circumvent the Travis issue that doesn't allow [complex bodies to be used in releases](https://github.com/travis-ci/dpl/issues/155).
